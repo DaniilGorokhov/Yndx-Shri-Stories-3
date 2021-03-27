@@ -51,7 +51,7 @@ export const data = produce((draft: Draft<State>, action: Action) => {
             const { alias, data } = action.data;
 
             if (alias) {
-                draft.stories[0].alias = alias;
+                draft.stories[draft.index].alias = alias;
             }
 
             if (data) {
