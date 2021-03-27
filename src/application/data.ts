@@ -1,7 +1,7 @@
 import produce, { Draft } from 'immer';
 
 import { Action } from './actions';
-import { descriptors, DRAFT_STATE, errors, INTERVAL, State } from './types';
+import { DELAY, descriptors, DRAFT_STATE, errors, INTERVAL, State } from './types';
 
 export function die(error: keyof typeof errors, ...args: any[]): never {
     const e = errors[error];
@@ -23,17 +23,20 @@ export const data = produce((draft: Draft<State>, action: Action) => {
             if (!draft.pause) {
                 draft.progress += INTERVAL;
             }
+
             break;
         case 'prev':
             draft.pause = false;
             draft.progress = 0;
             draft.index = Math.max(draft.index - 1, 0);
+
             break;
         case 'next':
             if (draft.index + 1 < draft.stories.length) {
                 draft.index++;
                 draft.progress = 0;
             } else {
+                draft.progress = DELAY;
                 draft.pause = true;
             }
 
@@ -42,6 +45,7 @@ export const data = produce((draft: Draft<State>, action: Action) => {
             draft.pause = false;
             draft.progress = 0;
             draft.index = 0;
+
             break;
         case 'update':
             const { alias, data } = action.data;
@@ -57,6 +61,7 @@ export const data = produce((draft: Draft<State>, action: Action) => {
             break;
         case 'theme':
             draft.theme = action.theme;
+
             break;
     }
 });
