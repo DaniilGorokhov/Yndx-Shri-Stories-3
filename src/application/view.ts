@@ -1,5 +1,5 @@
 import { XMessage } from '../messages';
-import { SlideTheme } from './types';
+import { SlideTheme, possibleThemes } from './types';
 
 export const setScale = (el: HTMLDivElement, value: number) => {
     el.style.transform = `scaleX(${value.toFixed(5)})`;
@@ -38,5 +38,13 @@ export const initProgress = (parent: HTMLDivElement) => {
 }
 
 export const setElementTheme = (elem: HTMLElement, theme: SlideTheme) => {
+    for (let themeIx = 0; themeIx < possibleThemes.length; themeIx += 1) {
+        const currentTheme = `theme_${possibleThemes[themeIx]}`;
+
+        if (elem.classList.contains(currentTheme)) {
+            elem.classList.remove(currentTheme);
+        }
+    }
+
     elem.classList.add(`theme_${theme}`);
 }

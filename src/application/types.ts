@@ -7,6 +7,7 @@ export interface Slide {
 }
 
 export type SlideTheme = 'light' | 'dark';
+export const possibleThemes: SlideTheme[] = ['dark', 'light'];
 
 export interface State {
     theme: SlideTheme;
