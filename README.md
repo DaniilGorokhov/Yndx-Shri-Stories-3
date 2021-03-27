@@ -17,3 +17,11 @@
 ### Решение
 
 Решением стала замена вызова функции `actionPrev` на вызов функции `actionNext`. И удаление операции `mergeMapTo(EMPTY)` в селекторе `createCurrentIndexSelector`
+
+## Коммит №3 - "Fix height of .slide-progress-value element"
+
+Далее, я заметил, что не работает progress bar. Сначала, мне нужно было понять, почему он не отображается. С помощью Chrome devtools я обнаружил, что у элементов progress bar'а (`.slide-progress-value` элементы) высота выставлена без единиц измерения.
+
+### Решение
+
+Для исправления ошибки в файле `./src/index.css` в наборе объявлений у селектора `.slide-progress-value` значение для свойства height нужно выставить в `4px` вместо `4`.
