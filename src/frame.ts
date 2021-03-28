@@ -2,40 +2,40 @@ import { messageAction, XMessage } from './messages';
 import { setElementTheme } from './application/view';
 import './frame.css';
 
-interface ExtendedWindow extends Window { 
-    renderTemplate: (alias: string, data: object) => string 
+interface ExtendedWindow extends Window {
+  renderTemplate: (alias: string, data: object) => string;
 }
 
-declare var window: ExtendedWindow;
+declare let window: ExtendedWindow;
 
 function ready() {
-    window.postMessage('load', '*');
+  window.postMessage('load', '*');
 }
 
 function sendMessage(msg: XMessage) {
-    window.postMessage(msg, '*');
-} 
+  window.postMessage(msg, '*');
+}
 
 function receiveMessage({ data }: MessageEvent<XMessage>) {
-    if (data.type === 'message@UPDATE') {
-        document.body.innerHTML = window.renderTemplate(data.alias, data.data);
-    } else if (data.type === 'message@SET_THEME') {
-        setElementTheme(document.body, data.theme);
-    }
+  if (data.type === 'message@UPDATE') {
+    document.body.innerHTML = window.renderTemplate(data.alias, data.data);
+  } else if (data.type === 'message@SET_THEME') {
+    setElementTheme(document.body, data.theme);
+  }
 }
 
 function onDocumentClick(e: MouseEvent) {
-    if (e.target instanceof HTMLElement) {
-        let { target } = e;
-        while (target && !target.dataset.action) {
-            target = target.parentElement;
-        }
-
-        if (target) {
-            const { action, params } = target.dataset;
-            sendMessage(messageAction(action, params));
-        }
+  if (e.target instanceof HTMLElement) {
+    let { target } = e;
+    while (target && !target.dataset.action) {
+      target = target.parentElement;
     }
+
+    if (target) {
+      const { action, params } = target.dataset;
+      sendMessage(messageAction(action, params));
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', ready);
