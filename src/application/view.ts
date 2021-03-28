@@ -1,6 +1,9 @@
 import { XMessage } from '../messages';
 import { SlideTheme, possibleThemes } from './types';
 
+const darkIcon = require('../assets/favicon-dark.png');
+const lightIcon = require('../assets/favicon-light.png');
+
 export const setScale = (el: HTMLDivElement, value: number): void => {
   el.style.transform = `scaleX(${value.toFixed(5)})`;
 };
@@ -47,4 +50,16 @@ export const setElementTheme = (elem: HTMLElement, theme: SlideTheme): void => {
   }
 
   elem.classList.add(`theme_${theme}`);
+};
+
+export const setThemeIcon = (theme: SlideTheme): void => {
+  const currentLink = document.querySelector('link[rel=\'icon\']');
+
+  if (currentLink instanceof HTMLLinkElement) {
+    if (theme === 'dark') {
+      currentLink.href = darkIcon;
+    } else if (theme === 'light') {
+      currentLink.href = lightIcon;
+    }
+  }
 };

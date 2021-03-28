@@ -22,6 +22,7 @@ import {
   initProgress,
   sendMessage,
   setElementTheme,
+  setThemeIcon,
   setScale,
 } from './application/view';
 
@@ -84,6 +85,7 @@ createCurrentDataSelector(state$)
 createThemeSelector(state$)
   .subscribe((theme) => {
     setElementTheme(document.body, theme);
+    setThemeIcon(theme);
     frames.forEach((iframe) => sendMessage(iframe, messageSetTheme(theme)));
   });
 

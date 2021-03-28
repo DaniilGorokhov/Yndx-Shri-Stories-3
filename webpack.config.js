@@ -14,7 +14,12 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new CopyPlugin({ patterns: ['public'] }),
-    new HtmlWebpackPlugin({ filename: 'index.html', chunks: ['index'], template: 'src/index.html' }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      chunks: ['index'],
+      template: 'src/index.html',
+      favicon: './src/assets/favicon-dark.png',
+    }),
     new HtmlWebpackPlugin({ filename: 'frame.html', chunks: ['frame'], template: 'src/frame.html' }),
     new MiniCssExtractPlugin(),
   ],
@@ -28,6 +33,10 @@ module.exports = {
       {
         test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
+        test: /\.(png|jpg|jpeg)$/,
+        type: 'asset/resource',
       },
     ],
   },

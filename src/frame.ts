@@ -1,9 +1,10 @@
 import { messageAction, XMessage } from './messages';
 import { setElementTheme } from './application/view';
+import { Slide } from './application/types';
 import './frame.css';
 
 interface ExtendedWindow extends Window {
-  renderTemplate: (alias: string, data: object) => string;
+  renderTemplate: (alias: Slide['alias'], data: Slide['data']) => string;
 }
 
 declare let window: ExtendedWindow;
@@ -25,17 +26,18 @@ function receiveMessage({ data }: MessageEvent<XMessage>) {
 }
 
 function onDocumentClick(e: MouseEvent) {
-  if (e.target instanceof HTMLElement) {
-    let eventTarget: HTMLElement | null = e.target;
-    while (eventTarget && !eventTarget.dataset.action) {
-      eventTarget = eventTarget.parentElement;
-    }
+  const path = e.composedPath();
+  let index = 0;
+  let target = path[index];
+  while (index < path.length
+    && (target instanceof HTMLElement || target instanceof SVGElement) && !target.dataset.action) {
+    index += 1;
+    target = path[index];
+  }
 
-    // (&& eventTarget.dataset.action) - is added as type guard for TypeScript
-    if (eventTarget && eventTarget.dataset.action) {
-      const { action, params } = eventTarget.dataset;
-      sendMessage(messageAction(action, params));
-    }
+  if (target && (target instanceof HTMLElement || target instanceof SVGElement) && target.dataset.action) {
+    const { action, params } = target.dataset;
+    sendMessage(messageAction(action, params));
   }
 }
 

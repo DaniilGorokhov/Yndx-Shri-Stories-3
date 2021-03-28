@@ -107,3 +107,9 @@
 В документации [TypeScript](https://www.typescriptlang.org/docs/handbook/2/basic-types.html#strictnullchecks) сказано о том, что следует использовать опцию `strictNullChecks` в проектах во избежание ошибок с необработанными `null` и `undefined`. Поэтому я добавил данную опцию в конфиг файл и изменил те части кода, где не были правильно обработаны `null` и `undefined`. Теперь, например, обрабатывается случай, когда из слайда вызывается action 'update', но без `params`.
 
 Это важное изменение, так как, если код впоследствии нужно будет расширять, то TypeScript будет сигнализировать о необработанных `null` и `undefined` сразу, что может уберечь от ошибок.
+
+## Коммит №13 - "Add renderTemplate function and styles from first task"
+
+Для выполнения дополнительного задания была изменена функция `onDocumentClick` из модуля `./src/frame.ts`, так как не поддерживалась обработка клика на `SVGElement`. Также, добавилась функция для изменения favicon - `setThemeIcon` в модуле `./src/application/view.ts`. Дополнительно, были прописаны типы для `state.stories`, то есть для данных шаблонов (слайдов) → посмотреть можно в модуле `./src/application/types.ts`.
+
+Посмотреть исходный код первого задания можно [здесь](https://github.com/DaniilGorokhov/Yndx-Shri-Stories-1), подключалась уже готовая сборка.
