@@ -26,13 +26,14 @@ function receiveMessage({ data }: MessageEvent<XMessage>) {
 
 function onDocumentClick(e: MouseEvent) {
   if (e.target instanceof HTMLElement) {
-    let { target } = e;
-    while (target && !target.dataset.action) {
-      target = target.parentElement;
+    let eventTarget: HTMLElement | null = e.target;
+    while (eventTarget && !eventTarget.dataset.action) {
+      eventTarget = eventTarget.parentElement;
     }
 
-    if (target) {
-      const { action, params } = target.dataset;
+    // (&& eventTarget.dataset.action) - is added as type guard for TypeScript
+    if (eventTarget && eventTarget.dataset.action) {
+      const { action, params } = eventTarget.dataset;
       sendMessage(messageAction(action, params));
     }
   }

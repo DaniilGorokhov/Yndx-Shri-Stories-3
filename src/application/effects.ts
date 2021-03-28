@@ -64,7 +64,15 @@ export function createEffects(
           return of(actionRestart());
         }
         case 'update': {
-          const data: Partial<Slide> = JSON.parse(a.params);
+          let data: Partial<Slide>;
+
+          if (typeof a.params === 'string') {
+            data = JSON.parse(a.params);
+          } else {
+            // Handle case, when data-params is undefined
+            data = {};
+          }
+
           return of(actionUpdate(data));
         }
         default: {

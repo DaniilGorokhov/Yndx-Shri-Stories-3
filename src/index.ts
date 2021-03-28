@@ -38,20 +38,41 @@ function onMessage({ data }: MessageEvent<XMessage>) {
 }
 
 const player = document.querySelector<HTMLDivElement>('.player');
-const frames = stories.map(({ alias, data }) => initIframe(player, (iframe) => {
-  sendMessage(iframe, messageUpdate(alias, data));
-  iframe.contentWindow.addEventListener('message', onMessage);
-}));
+const frames = stories.map(
+  ({ alias, data }) => {
+    if (player) {
+      return initIframe(player, (iframe) => {
+        if (iframe.contentWindow) {
+          sendMessage(iframe, messageUpdate(alias, data));
+          iframe.contentWindow.addEventListener('message', onMessage);
+        } else {
+          throw new Error('Error: iframe did not load');
+        }
+      });
+    }
+    throw new Error('Error: .player did not find');
+  },
+);
 
 const progress = document.querySelector<HTMLDivElement>('.progress-container');
-const bars = stories.map(() => initProgress(progress));
+const bars = stories.map(() => {
+  if (progress) {
+    return initProgress(progress);
+  }
+  throw new Error('Error: .progress-container did not find');
+});
 
 createProgressSelector(state$)
   .subscribe(({ index, value }) => setScale(bars[index], value));
 
 createCurrentIndexSelector(state$)
   .subscribe((index) => {
-    player.style.transform = `translateX(-${index * 100}%)`;
+    if (player) {
+      player.style.transform = `translateX(-${index * 100}%)`;
+    } else {
+      throw new Error('Error: .player did not find');
+    }
+
     bars.forEach((el, i) => setScale(el, i < index ? 1 : 0));
   });
 
@@ -66,13 +87,37 @@ createThemeSelector(state$)
     frames.forEach((iframe) => sendMessage(iframe, messageSetTheme(theme)));
   });
 
-document.querySelector<HTMLDivElement>('.set-light')
-  .addEventListener('click', () => dispatch(actionSetTheme('light')));
-document.querySelector<HTMLDivElement>('.set-dark')
-  .addEventListener('click', () => dispatch(actionSetTheme('dark')));
-document.querySelector<HTMLDivElement>('.prev')
-  .addEventListener('click', () => dispatch(actionPrev()));
-document.querySelector<HTMLDivElement>('.next')
-  .addEventListener('click', () => dispatch(actionNext()));
-document.querySelector<HTMLDivElement>('.restart')
-  .addEventListener('click', () => dispatch(actionRestart()));
+const setLightElement = document.querySelector<HTMLDivElement>('.set-light');
+if (setLightElement) {
+  setLightElement.addEventListener('click', () => dispatch(actionSetTheme('light')));
+} else {
+  throw new Error('Error: .set-light did not find');
+}
+
+const setDarkElement = document.querySelector<HTMLDivElement>('.set-dark');
+if (setDarkElement) {
+  setDarkElement.addEventListener('click', () => dispatch(actionSetTheme('dark')));
+} else {
+  throw new Error('Error: .set-dark did not find');
+}
+
+const prevElement = document.querySelector<HTMLDivElement>('.prev');
+if (prevElement) {
+  prevElement.addEventListener('click', () => dispatch(actionPrev()));
+} else {
+  throw new Error('Error: .prev did not find');
+}
+
+const nextElement = document.querySelector<HTMLDivElement>('.next');
+if (nextElement) {
+  nextElement.addEventListener('click', () => dispatch(actionNext()));
+} else {
+  throw new Error('Error: .next did not find');
+}
+
+const restartElement = document.querySelector<HTMLDivElement>('.restart');
+if (restartElement) {
+  restartElement.addEventListener('click', () => dispatch(actionRestart()));
+} else {
+  throw new Error('Error: .restart did not find');
+}

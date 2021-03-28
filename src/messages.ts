@@ -11,7 +11,7 @@ export const messageSetTheme = (theme: SlideTheme) => ({
   theme,
 } as const);
 
-export const messageAction = (action: string, params: string) => ({
+export const messageAction = (action: string, params: string | undefined) => ({
   type: 'message@ACTION',
   action,
   params,

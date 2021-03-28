@@ -12,7 +12,10 @@ export const actionUpdate = (data: Partial<Slide>) => ({ type: 'update', data } 
 
 export const actionTimer = () => ({ type: 'timer' } as const);
 
-export const actionMessage = (action: string, params: string) => ({ type: 'message', action, params } as const);
+export const actionMessage = (
+  action: string,
+  params: string | undefined,
+) => ({ type: 'message', action, params } as const);
 
 export type Action =
   | ReturnType<typeof actionNext>
